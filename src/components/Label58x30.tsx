@@ -20,7 +20,8 @@ export const Label58x30 = ({ data }: Label58x30Props) => {
       <div className="flex-1 flex items-center justify-center">
         <Barcode
           value={data.barcode}
-          width={1.2}
+          format={data.barcodeType}
+          width={data.barcodeType === "EAN8" ? 1.5 : 1.2}
           height={35}
           fontSize={8}
           background="transparent"

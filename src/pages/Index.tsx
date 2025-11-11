@@ -12,6 +12,7 @@ const Index = () => {
     expiry: "04/11/2026",
     price: "1,79",
     barcode: "7891234567890",
+    barcodeType: "EAN13",
   });
 
   const [selectedSize, setSelectedSize] = useState<"58x30" | "50x50">("58x30");
