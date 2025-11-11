@@ -29,20 +29,15 @@ export const Label50x50 = ({ data }: Label50x50Props) => {
         />
       </div>
       
-      <div className="grid grid-cols-2 gap-1 text-[9px] text-[hsl(var(--label-text))] mt-1">
-        <div>
+      <div className="text-[9px] text-[hsl(var(--label-text))] flex items-center justify-between gap-2 mt-1">
+        <span>
           <span className="font-bold">QTDE:</span> {data.quantity}
-        </div>
-        <div className="text-right">
-          <span className="font-bold">VAL:</span> {data.expiry}
-        </div>
-      </div>
-      
-      <div className="flex justify-between items-center mt-1">
-        <span className="text-[9px] font-medium text-[hsl(var(--label-text))]">
-          Litro
         </span>
-        <span className="text-[11px] font-bold text-[hsl(var(--label-text))]">
+        <span className="font-medium">Litro</span>
+        <span>
+          <span className="font-bold">VAL:</span> {data.expiry}
+        </span>
+        <span className="font-bold text-[11px]">
           R$ {data.price}
         </span>
       </div>
