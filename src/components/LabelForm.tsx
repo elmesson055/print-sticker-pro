@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Printer, RefreshCw } from "lucide-react";
+import { Download, RefreshCw } from "lucide-react";
 import { generateBarcode, BarcodeType } from "@/lib/barcodeUtils";
 
 export interface LabelData {
@@ -178,8 +178,8 @@ export const LabelForm = ({ onDataChange, onPrint, selectedSize, onSizeChange }:
         </div>
 
         <Button onClick={onPrint} className="w-full" size="lg">
-          <Printer className="mr-2 h-5 w-5" />
-          Imprimir Etiqueta
+          <Download className="mr-2 h-5 w-5" />
+          Baixar Etiqueta em PDF
         </Button>
       </CardContent>
     </Card>
