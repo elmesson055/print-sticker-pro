@@ -2,8 +2,10 @@ import { useState, useRef } from "react";
 import { LabelForm, LabelData } from "@/components/LabelForm";
 import { Label58x30 } from "@/components/Label58x30";
 import { Label50x50 } from "@/components/Label50x50";
-import { useReactToPrint } from "react-to-print";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import { toast } from "sonner";
 
 const Index = () => {
   const [labelData, setLabelData] = useState<LabelData>({
@@ -18,21 +20,44 @@ const Index = () => {
   const [selectedSize, setSelectedSize] = useState<"58x30" | "50x50">("58x30");
   const printRef = useRef<HTMLDivElement>(null);
 
-  const handlePrint = useReactToPrint({
-    contentRef: printRef,
-    pageStyle: `
-      @page {
-        size: ${selectedSize === "58x30" ? "58mm 30mm" : "50mm 50mm"};
-        margin: 0;
-      }
-      @media print {
-        body {
-          margin: 0;
-          padding: 0;
-        }
-      }
-    `,
-  });
+  const handleDownloadPDF = async () => {
+    if (!printRef.current) return;
+
+    try {
+      toast.loading("Gerando PDF...");
+      
+      // Converter o HTML para canvas
+      const canvas = await html2canvas(printRef.current, {
+        scale: 3, // Alta qualidade
+        backgroundColor: "#ffffff",
+      });
+
+      // Dimensões em mm
+      const width = selectedSize === "58x30" ? 58 : 50;
+      const height = selectedSize === "58x30" ? 30 : 50;
+
+      // Criar PDF com as dimensões corretas
+      const pdf = new jsPDF({
+        orientation: width > height ? "landscape" : "portrait",
+        unit: "mm",
+        format: [width, height],
+      });
+
+      // Adicionar a imagem ao PDF
+      const imgData = canvas.toDataURL("image/png");
+      pdf.addImage(imgData, "PNG", 0, 0, width, height);
+
+      // Baixar o PDF
+      pdf.save(`etiqueta-${labelData.productName.substring(0, 20)}-${Date.now()}.pdf`);
+      
+      toast.dismiss();
+      toast.success("PDF baixado com sucesso!");
+    } catch (error) {
+      toast.dismiss();
+      toast.error("Erro ao gerar PDF");
+      console.error(error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background py-8 px-4">
@@ -42,7 +67,7 @@ const Index = () => {
             Sistema de Etiquetas
           </h1>
           <p className="text-muted-foreground">
-            Gere e imprima etiquetas profissionais para seus produtos
+            Gere e baixe etiquetas profissionais em PDF para seus produtos
           </p>
         </div>
 
@@ -50,7 +75,7 @@ const Index = () => {
           <div>
             <LabelForm
               onDataChange={setLabelData}
-              onPrint={handlePrint}
+              onPrint={handleDownloadPDF}
               selectedSize={selectedSize}
               onSizeChange={setSelectedSize}
             />
