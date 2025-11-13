@@ -44,6 +44,14 @@ jobs:
     - name: Add Android platform
       run: npx cap add android
       
+    - name: Copy Android configuration files
+      run: |
+        cp android-config/variables.gradle android/variables.gradle
+        cp android-config/build.gradle android/build.gradle
+        cp android-config/gradle.properties android/gradle.properties
+        cp android-config/app/build.gradle android/app/build.gradle
+        cp android-config/settings.gradle android/settings.gradle
+      
     - name: Sync Capacitor
       run: npx cap sync
       
@@ -52,7 +60,7 @@ jobs:
       
     - name: Build Android APK
       working-directory: android
-      run: ./gradlew assembleDebug --stacktrace
+      run: ./gradlew assembleDebug --stacktrace --info
         
     - name: Upload APK
       uses: actions/upload-artifact@v4
